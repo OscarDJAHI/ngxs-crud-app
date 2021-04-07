@@ -1,31 +1,33 @@
-import {Component, OnInit} from '@angular/core';
-import {TodoState} from '../states/todo.state';
-import {Select, Store} from '@ngxs/store';
-import {Todo} from '../models/Todo';
-import {Observable} from 'rxjs';
-import {DeleteTodo, GetTodos, SetSelectedTodo} from '../actions/todo.action';
+import { Component, OnInit } from '@angular/core';
+import { TodoState } from '../states/todo.state';
+import { Select, Store } from '@ngxs/store';
+import { Todo } from '../models/Todo';
+import { Observable } from 'rxjs';
+import { DeleteTodo, GetTodos, SetSelectedTodo } from '../actions/todo.action';
 
 @Component({
-    selector: 'app-list',
-    templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+  selector: 'app-list',
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-    @Select(TodoState.getTodoList) todos: Observable<Todo[]>;
 
-    constructor(private store: Store) {
-    }
+  @Select(TodoState.getTodoList) todos: Observable<Todo[]>;
 
-    ngOnInit() {
-        this.store.dispatch(new GetTodos());
-    }
+  constructor(
+    private store: Store
+  ) {}
 
-    deleteTodo(id: number) {
-        this.store.dispatch(new DeleteTodo(id));
-    }
+  ngOnInit() {
+    this.store.dispatch(new GetTodos());
+  }
 
-    editTodo(payload: Todo) {
-        this.store.dispatch(new SetSelectedTodo(payload));
-    }
+  deleteTodo(id: number) {
+    this.store.dispatch(new DeleteTodo(id));
+  }
+
+  editTodo(payload: Todo) {
+    this.store.dispatch(new SetSelectedTodo(payload));
+  }
 
 }

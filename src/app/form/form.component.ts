@@ -1,11 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Select, Store} from '@ngxs/store';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TodoState} from '../states/todo.state';
-import {AddTodo, SetSelectedTodo, UpdateTodo} from '../actions/todo.action';
-import {Observable, Subscription} from 'rxjs';
-import {Todo} from '../models/Todo';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Select, Store } from '@ngxs/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TodoState } from '../states/todo.state';
+import { AddTodo, SetSelectedTodo, UpdateTodo } from '../actions/todo.action';
+import { Observable, Subscription } from 'rxjs';
+import { Todo } from '../models/Todo';
 
 @Component({
   selector: 'app-form',
@@ -13,13 +13,19 @@ import {Todo} from '../models/Todo';
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit, OnDestroy {
+
   @Select(TodoState.getSelectedTodo) selectedTodo: Observable<Todo>;
   todoForm: FormGroup;
   editTodo = false;
   private formSubscription: Subscription = new Subscription();
 
-  constructor(private fb: FormBuilder, private store: Store, private route: ActivatedRoute, private router: Router) {
-    this.createForm();
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.initForm();
   }
 
   ngOnInit() {
@@ -39,11 +45,7 @@ export class FormComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.formSubscription.unsubscribe();
-  }
-
-  createForm() {
+  initForm() {
     this.todoForm = this.fb.group({
       id: [''],
       userId: ['', Validators.required],
@@ -70,5 +72,9 @@ export class FormComponent implements OnInit, OnDestroy {
   clearForm() {
     this.todoForm.reset();
     this.store.dispatch(new SetSelectedTodo(null));
+  }
+
+  ngOnDestroy(): void {
+    this.formSubscription.unsubscribe();
   }
 }
